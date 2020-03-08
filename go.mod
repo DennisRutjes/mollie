@@ -1,4 +1,4 @@
-module mollie
+module github.com/DennisRutjes/mollie
 
 go 1.13
 
