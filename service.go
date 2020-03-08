@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"mollie/payment"
+	"github.com/DennisRutjes/mollie/payment"
 )
 
 // test_E4Afehj7hGDFG6uDVvT7yPVdC7hjHM
@@ -113,7 +113,7 @@ func (ps *PaymentsService) WithRestrictPaymentMethodsToCountry(restrictPaymentMe
 	return ps
 }
 
-func (ps *PaymentsService) Do(ctx context.Context, ) (data []byte, err error) {
+func (ps *PaymentsService) Do(ctx context.Context) (data []byte, err error) {
 
 	return nil, nil
 }
