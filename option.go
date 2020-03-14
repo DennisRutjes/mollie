@@ -20,7 +20,6 @@ type ApiKey string
 
 type Option func(*option)
 
-// todo throw error if wrong locale or default to en_US
 func WithLocale(locale Locale) Option {
 	return func(o *option) {
 		o.locale = localeMap[locale]
