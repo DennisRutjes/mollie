@@ -6,12 +6,15 @@ import (
 	"testing"
 )
 
+var test_key = "test_........"
+
+/*
+ * curl -X GET "https://api.mollie.com/v2/methods?profileId=pfl_UCUhu7C7cq" -H "Authorization: Bearer test_2qhaUVDhEpvac95SN5gRdzTMcyqxNd"
+ */
 func TestMethodsService_GetMethods(t *testing.T) {
 
-	// curl -X GET "https://api.mollie.com/v2/methods?profileId=pfl_UCUhu7C7cq" -H "Authorization: Bearer test_2qhaUVDhEpvac95SN5gRdzTMcyqxNd"
-
 	profileId := "fill in"
-	apiKey := ApiKey("test_......")
+	apiKey := ApiKey(test_key)
 
 	mollie := NewMollieClient(
 		profileId,
@@ -27,12 +30,20 @@ func TestMethodsService_GetMethods(t *testing.T) {
 
 }
 
-func TestMethodsService_CreatePayment(t *testing.T) {
-
-	// curl -X GET "https://api.mollie.com/v2/methods?profileId=pfl_UCUhu7C7cq" -H "Authorization: Bearer test_2qhaUVDhEpvac95SN5gRdzTMcyqxNd"
+/*
+ *	curl -X POST https://api.mollie.com/v2/payments \
+ *	   -H "Authorization: Bearer test_dHar4XY7LxsDOtmnkVtjNVWXLSlXsM" \
+ *	   -d "amount[currency]=EUR" \
+ *	   -d "amount[value]=10.00" \
+ *	   -d "description=Order #12345" \
+ *	   -d "redirectUrl=https://webshop.example.org/order/12345/" \
+ *	   -d "webhookUrl=https://webshop.example.org/payments/webhook/" \
+ *	   -d "metadata={\"order_id\": \"12345\"}"
+ */
+func TestMethodsService_Payment(t *testing.T) {
 
 	profileId := "fill in"
-	apiKey := ApiKey("test_......")
+	apiKey := ApiKey(test_key)
 
 	mollie := NewMollieClient(
 		profileId,
@@ -45,6 +56,9 @@ func TestMethodsService_CreatePayment(t *testing.T) {
 			Currency: "EUR",
 		}).
 		WithDescription("Payment of product").
+		WithLocale(NL_NL).
+		// todo add payment specific data, for now leave this blank mollie wil take care of it
+		// WithPaymentMethods(payment.Ideal, payment.Inghomepay).
 		WithWebHookUrl(MustParse("https://webshop.example.org/order/12345")).
 		WithRedirectUrl(MustParse("https://webshop.example.org/payments/webhook/")).
 		WithMetadata(Metadata{"orderId": "12345"}).

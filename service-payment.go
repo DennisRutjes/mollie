@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/DennisRutjes/mollie/payment"
 )
@@ -78,6 +77,7 @@ type Payment struct {
 	WebhookURL  string   `json:"webhookUrl"`
 	RedirectURL string   `json:"redirectUrl"`
 	Metadata    Metadata `json:"metadata"`
+	Locale      string   `json:"locale"`
 }
 
 func (ps *PaymentsService) WithAmount(amount Amount) *PaymentsService {
@@ -137,27 +137,27 @@ func (ps *PaymentsService) WithTestMode(testmode bool) *PaymentsService {
 
 func (ps *PaymentsService) Do(ctx context.Context) (status int, data []byte, err error) {
 
-	params := url.Values{}
-	if ps.amount != nil {
-		params.Add("amount[value]", ps.amount.Value)
-		params.Add("amount[currency]", ps.amount.Currency)
-	}
-
-	if st, ok := sequenceTypMap[ps.sequenceType]; ok {
-		params.Add("sequenceType", st)
-	}
-
-	if l, ok := localeMap[ps.locale]; ok {
-		params.Add("locale", l)
-	}
-
-	if ps.c.Option.authmode.ApiKey == "" {
-		if ps.testmode {
-			params.Add("testmode", strconv.FormatBool(ps.testmode))
-		}
-
-		params.Add("profileId", ps.c.ProfileId)
-	}
+	// params := url.Values{}
+	// if ps.amount != nil {
+	// 	params.Add("amount[value]", ps.amount.Value)
+	// 	params.Add("amount[currency]", ps.amount.Currency)
+	// }
+	//
+	// if st, ok := sequenceTypMap[ps.sequenceType]; ok {
+	// 	params.Add("sequenceType", st)
+	// }
+	//
+	// if l, ok := localeMap[ps.locale]; ok {
+	// 	params.Add("locale", l)
+	// }
+	//
+	// if ps.c.Option.authmode.ApiKey == "" {
+	// 	if ps.testmode {
+	// 		params.Add("testmode", strconv.FormatBool(ps.testmode))
+	// 	}
+	//
+	// 	params.Add("profileId", ps.c.ProfileId)
+	// }
 
 	endpoint := fmt.Sprintf("%s/%s", ps.c.BaseURL, ps.uri)
 
@@ -167,6 +167,10 @@ func (ps *PaymentsService) Do(ctx context.Context) (status int, data []byte, err
 		WebhookURL:  ps.webHookUrl.String(),
 		RedirectURL: ps.redirectUrl.String(),
 		Metadata:    ps.metadata,
+	}
+
+	if locale, ok := localeMap[ps.locale]; ok {
+		pay.Locale = locale
 	}
 
 	pd, err := json.Marshal(pay)
