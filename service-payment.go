@@ -135,7 +135,7 @@ func (ps *PaymentsService) WithTestMode(testmode bool) *PaymentsService {
 	return ps
 }
 
-func (ps *PaymentsService) PostPayment(ctx context.Context) (status int, data []byte, err error) {
+func (ps *PaymentsService) Do(ctx context.Context) (status int, data []byte, err error) {
 
 	params := url.Values{}
 	if ps.amount != nil {

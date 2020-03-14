@@ -18,7 +18,7 @@ func TestMethodsService_GetMethods(t *testing.T) {
 		WithHTTPClient(NewHTTPClient(3000)),
 		WithAuthMode(AuthMode{ApiKey: apiKey}))
 
-	status, response, err := mollie.NewMethodsService().GetMethods(context.Background())
+	status, response, err := mollie.NewMethodsService().Do(context.Background())
 	if err != nil && status != 200 {
 		t.Fatalf("Dont want error, go %v", err)
 	}
@@ -39,7 +39,16 @@ func TestMethodsService_CreatePayment(t *testing.T) {
 		WithHTTPClient(NewHTTPClient(3000)),
 		WithAuthMode(AuthMode{ApiKey: apiKey}))
 
-	status, response, err := mollie.NewPaymentsService().PostPayment(context.Background())
+	status, response, err := mollie.NewPaymentsService().
+		WithAmount(Amount{
+			Value:    "10.00",
+			Currency: "EUR",
+		}).
+		WithDescription("Payment of product").
+		WithWebHookUrl(MustParse("https://webshop.example.org/order/12345")).
+		WithRedirectUrl(MustParse("https://webshop.example.org/payments/webhook/")).
+		WithMetadata(Metadata{"orderId": "12345"}).
+		Do(context.Background())
 	if err != nil && status != 200 {
 		t.Fatalf("Dont want error, go %v", err)
 	}

@@ -48,7 +48,7 @@ func (ms *MethodsService) WithTestMode(testmode bool) *MethodsService {
 	return ms
 }
 
-func (ms *MethodsService) GetMethods(ctx context.Context) (status int, data []byte, err error) {
+func (ms *MethodsService) Do(ctx context.Context) (status int, data []byte, err error) {
 
 	params := url.Values{}
 	if ms.amount != nil {
