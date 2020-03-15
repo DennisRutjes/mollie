@@ -62,7 +62,7 @@ func TestMethodsService_Payment(t *testing.T) {
 		WithWebHookUrl(MustParse("https://webshop.example.org/order/12345")).
 		WithRedirectUrl(MustParse("https://webshop.example.org/payments/webhook/")).
 		WithMetadata(Metadata{"orderId": "12345"}).
-		Do(context.Background())
+		DoCreate(context.Background())
 	if err != nil && status != 200 {
 		t.Fatalf("Dont want error, go %v", err)
 	}
