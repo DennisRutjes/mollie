@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var test_key = "test_........"
+var test_key = "test_2qhaUVDhEpvac95SN5gRdzTMcyqxNd"
 
 /*
  * curl -X GET "https://api.mollie.com/v2/methods?profileId=pfl_UCUhu7C7cq" -H "Authorization: Bearer test_2qhaUVDhEpvac95SN5gRdzTMcyqxNd"

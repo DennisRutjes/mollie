@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/DennisRutjes/mollie/payment"
 )
@@ -135,7 +136,38 @@ func (ps *PaymentsService) WithTestMode(testmode bool) *PaymentsService {
 	return ps
 }
 
-func (ps *PaymentsService) Do(ctx context.Context) (status int, data []byte, err error) {
+func (ps *PaymentsService) DoGet(ctx context.Context, paymentId string) (status int, data []byte, err error) {
+	params := url.Values{}
+
+	if ps.testmode {
+		params.Add("testmode", strconv.FormatBool(ps.testmode))
+	}
+
+	endpoint := fmt.Sprintf("%s/%s/%s", ps.c.BaseURL, ps.uri, paymentId)
+	if len(params) > 0 {
+		endpoint = fmt.Sprintf("%s/%s/%s?%s", ps.c.BaseURL, ps.uri, paymentId, params.Encode())
+	}
+
+	request, err := http.NewRequestWithContext(ctx, "Get", endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	if ps.c.Option.authmode.ApiKey != "" {
+		request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", ps.c.Option.authmode.ApiKey))
+	}
+
+	response, err := ps.c.HTTPClient.Do(request)
+	if err != nil {
+		return
+	}
+	status = response.StatusCode
+	data, err = ioutil.ReadAll(response.Body)
+
+	return
+}
+
+func (ps *PaymentsService) DoCreate(ctx context.Context) (status int, data []byte, err error) {
 
 	// params := url.Values{}
 	// if ps.amount != nil {
