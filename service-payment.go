@@ -75,7 +75,7 @@ type PaymentsService struct {
 type Payment struct {
 	Amount      Amount   `json:"amount"`
 	Description string   `json:"description"`
-	WebhookURL  string   `json:"webhookUrl"`
+	WebhookURL  string   `json:"webhookUrl,omitempty"`
 	RedirectURL string   `json:"redirectUrl"`
 	Metadata    Metadata `json:"metadata"`
 	Locale      string   `json:"locale"`
@@ -196,9 +196,15 @@ func (ps *PaymentsService) DoCreate(ctx context.Context) (status int, data []byt
 	pay := &Payment{
 		Amount:      *ps.amount,
 		Description: ps.description,
-		WebhookURL:  ps.webHookUrl.String(),
 		RedirectURL: ps.redirectUrl.String(),
-		Metadata:    ps.metadata,
+	}
+
+	if ps.webHookUrl != nil {
+		pay.WebhookURL = ps.webHookUrl.String()
+	}
+
+	if len(ps.metadata) > 0 {
+		pay.Metadata = ps.metadata
 	}
 
 	if locale, ok := localeMap[ps.locale]; ok {
