@@ -73,13 +73,14 @@ type PaymentsService struct {
 }
 
 type Payment struct {
-	Amount      Amount   `json:"amount"`
-	Description string   `json:"description"`
-	WebhookURL  string   `json:"webhookUrl,omitempty"`
-	RedirectURL string   `json:"redirectUrl"`
-	Metadata    Metadata `json:"metadata"`
-	Locale      string   `json:"locale"`
-	Method      []string `json:"method,omitempty"`
+	Amount       Amount   `json:"amount"`
+	Description  string   `json:"description"`
+	WebhookURL   string   `json:"webhookUrl,omitempty"`
+	RedirectURL  string   `json:"redirectUrl"`
+	Metadata     Metadata `json:"metadata"`
+	Locale       string   `json:"locale"`
+	SequenceType string   `json:"sequenceType, omitempty"`
+	Method       []string `json:"method,omitempty"`
 }
 
 func (ps *PaymentsService) WithAmount(amount Amount) *PaymentsService {
@@ -195,10 +196,11 @@ func (ps *PaymentsService) DoCreate(ctx context.Context) (status int, data []byt
 	endpoint := fmt.Sprintf("%s/%s", ps.c.BaseURL, ps.uri)
 
 	pay := &Payment{
-		Amount:      *ps.amount,
-		Description: ps.description,
-		RedirectURL: ps.redirectUrl.String(),
-		Method:      []string{},
+		Amount:       *ps.amount,
+		Description:  ps.description,
+		RedirectURL:  ps.redirectUrl.String(),
+		Method:       []string{},
+		SequenceType: sequenceTypMap[ps.sequenceType],
 	}
 
 	for _, p := range ps.paymentMethods {
