@@ -79,6 +79,7 @@ type Payment struct {
 	RedirectURL string   `json:"redirectUrl"`
 	Metadata    Metadata `json:"metadata"`
 	Locale      string   `json:"locale"`
+	Method      []string `json:"method,omitempty"`
 }
 
 func (ps *PaymentsService) WithAmount(amount Amount) *PaymentsService {
@@ -197,6 +198,11 @@ func (ps *PaymentsService) DoCreate(ctx context.Context) (status int, data []byt
 		Amount:      *ps.amount,
 		Description: ps.description,
 		RedirectURL: ps.redirectUrl.String(),
+		Method:      []string{},
+	}
+
+	for _, p := range ps.paymentMethods {
+		pay.Method = append(pay.Method, payment.PaymentMethodMap[p])
 	}
 
 	if ps.webHookUrl != nil {

@@ -24,7 +24,7 @@ const (
 
 type MethodMap map[PaymentMethod]string
 
-var localeMap = MethodMap{
+var PaymentMethodMap = MethodMap{
 	Applepay:     "applepay",
 	Bancontact:   "bancontact",
 	Banktransfer: "banktransfer",
