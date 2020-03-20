@@ -3,6 +3,7 @@ package payment
 type PaymentMethod int
 
 const (
+	Unknown                = -1
 	Applepay PaymentMethod = iota
 	Bancontact
 	Banktransfer
@@ -43,3 +44,13 @@ var PaymentMethodMap = MethodMap{
 	Przelewy24:   "przelewy24",
 	Sofort:       "sofort",
 }
+
+func (mm MethodMap) GetPaymentMethod(method string) PaymentMethod {
+	for k, v := range mm {
+		if v == method {
+			return k
+		}
+	}
+	return Unknown
+}
+
