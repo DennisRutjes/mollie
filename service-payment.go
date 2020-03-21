@@ -150,7 +150,7 @@ func (ps *PaymentsService) DoGet(ctx context.Context, paymentId string) (status 
 		endpoint = fmt.Sprintf("%s/%s/%s?%s", ps.c.BaseURL, ps.uri, paymentId, params.Encode())
 	}
 
-	request, err := http.NewRequestWithContext(ctx, "Get", endpoint, nil)
+	request, err := http.NewRequestWithContext(ctx, "GET", endpoint, nil)
 	if err != nil {
 		return
 	}
